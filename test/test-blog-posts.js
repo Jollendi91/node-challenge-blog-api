@@ -25,8 +25,26 @@ describe('Blog Posts', function() {
                 expect(res).to.be.json;
                 expect(res.body).to.be.an('array');
                 expect(res.body.length).to.be.at.least(1);
-                const expectedKeys = ['id', 'title', 'content', 'author'];
-                expect(res.body).to.include.keys(expectedKeys);
+                const expectedKeys = ['id', 'title', 'content', 'author', 'publishDate'];
+                res.body.forEach(function(post) {
+                    expect(post).to.be.an('object');
+                    expect(post).to.include.keys(expectedKeys);
+                });
+            });
+    });
+
+    it('should add a post on POST', function() {
+        const newPost = {title: "test-post", content: "This is the content for the test post", author: "Test Williams"};
+        return chai.request(app)
+            .post('/blog-posts')
+            .send(newPost)
+            .then(function(res) {
+                expect(res).to.have.status(201);
+                expect(res).to.be.json;
+                expect(res.body).to.be.an('object');
+                expect(res.body).to.include.keys('id', 'title', 'content', 'author', 'publishDate');
+                expect(res.body.id).to.not.equal(null);
+                expect(res.body).to.deep.equal(Object.assign(newPost, {id: res.body.id, publishDate: res.body.publishDate}));
             });
     });
 });
