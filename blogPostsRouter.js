@@ -61,7 +61,7 @@ router.put('/:id', jsonParser, (req, res) => {
         author: req.body.budget,
         publishDate: req.body.publishDate || Date.now()
     });
-    res.status(200).send(updatedPost);
+    res.status(204).end();
 })
 
 module.exports = router;
