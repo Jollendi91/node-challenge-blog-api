@@ -48,6 +48,16 @@ describe('Blog Posts', function() {
             });
     });
 
+    it('should error if POST missing expected values', function() {
+        const badRequestData = {};
+        return chai.request(app)
+            .post('/blog-posts')
+            .send(badRequestData)
+            .catch(function(res) {
+                expect(res).to.have.status(400);
+            });
+    });
+
     it('should update a post on PUT', function() {
         const updatePost = {title: "updated post", content: "This is the updated content to this post", author: "Up Dater"};
         return chai.request(app)
